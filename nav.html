@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的个人导航</title>
+    <style>
+        /* 基础样式设置 */
+        :root {
+            --bg-color: #e8f5e9; /* 护眼绿背景 */
+            --primary-color: #2e7d32; /* 主色调 */
+            --secondary-color: #4caf50; /* 次要色调 */
+            --accent-color: #1b5e20; /* 强调色 */
+            --text-color: #263238; /* 文字颜色 */
+            --card-bg: #f1f8e9; /* 卡片背景 */
+            --card-hover: #dcedc8; /* 卡片悬停 */
+            --shadow-color: rgba(0, 0, 0, 0.1); /* 阴影颜色 */
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "PingFang SC", "Microsoft YaHei", "微软雅黑", sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            position: relative;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 32px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 3px;
+            background-color: var(--secondary-color);
+            border-radius: 2px;
+        }
+        
+        .subtitle {
+            color: var(--accent-color);
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid var(--secondary-color);
+            border-radius: 30px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+            background-color: white;
+        }
+        
+        .search-input:focus {
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+            border-color: var(--primary-color);
+        }
+        
+        .search-button {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .search-button:hover {
+            background-color: var(--accent-color);
+        }
+        
+        .nav-section {
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.6s forwards;
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .nav-section:nth-child(2) { animation-delay: 0.1s; }
+        .nav-section:nth-child(3) { animation-delay: 0.2s; }
+        .nav-section:nth-child(4) { animation-delay: 0.3s; }
+        .nav-section:nth-child(5) { animation-delay: 0.4s; }
+        
+        .section-title {
+            font-size: 22px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            padding-left: 15px;
+            border-left: 4px solid var(--secondary-color);
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title::after {
+            content: '';
+            height: 1px;
+            background-color: var(--secondary-color);
+            flex-grow: 1;
+            margin-left: 15px;
+            opacity: 0.5;
+        }
+        
+        .nav-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .nav-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px var(--shadow-color);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .nav-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px var(--shadow-color);
+            background-color: var(--card-hover);
+        }
+        
+        .card-icon {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+        
+        .nav-card:hover .card-icon {
+            transform: scale(1.2);
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .card-desc {
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .quick-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .quick-link {
+            background-color: white;
+            border: 1px solid var(--secondary-color);
+            border-radius: 20px;
+            padding: 8px 15px;
+            text-decoration: none;
+            color: var(--primary-color);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .quick-link:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .article-section {
+            margin: 50px 0;
+        }
+        
+        .article-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px var(--shadow-color);
+            transition: transform 0.3s ease;
+        }
+        
+        .article-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .article-title {
+            font-size: 20px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .article-content {
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            text-indent: 2em;
+        }
+        
+        .article-meta {
+            font-size: 14px;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+            color: var(--accent-color);
+            font-size: 14px;
+            border-top: 1px solid rgba(46, 125, 50, 0.2);
+        }
+        
+        .weather-widget {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px var(--shadow-color);
+            text-align: center;
+        }
+        
+        .date-display {
+            font-size: 16px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .settings-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px var(--shadow-color);
+            transition: all 0.3s ease;
+            z-index: 100;
+            border: none;
+            font-size: 20px;
+        }
+        
+        .settings-button:hover {
+            transform: rotate(30deg);
+            background-color: var(--accent-color);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 26px;
+            }
+            
+            .nav-cards {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 15px;
+            }
+            
+            .article-card {
+                padding: 20px;
+            }
+            
+            .article-title {
+                font-size: 18px;
+            }
+            
+            .article-content {
+                font-size: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .search-button {
+                position: relative;
+                width: 100%;
+                right: 0;
+                top: 10px;
+                border-radius: 30px;
+            }
+            
+            .nav-cards {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>我的个人导航</h1>
+            <p class="subtitle">高效便捷的网址导航，让工作学习更轻松</p>
+            
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="搜索..." id="search-input">
+                <button class="search-button" id="search-button">搜索</button>
+            </div>
+        </header>
+        
+        <div class="weather-widget">
+            <div class="date-display" id="date-display">加载中...</div>
+        </div>
+        
+        <div class="nav-section">
+            <h2 class="section-title">常用工具</h2>
+            <div class="nav-cards">
+                <a href="#" class="nav-card" data-type="tool">
+                    <div class="card-icon">📝</div>
+                    <div class="card-title">在线笔记</div>
+                    <div class="card-desc">快速记录想法和灵感</div>
+                </a>
+                <a href="#" class="nav-card" data-type="tool">
+                    <div class="card-icon">📊</div>
+                    <div class="card-title">数据分析</div>
+                    <div class="card-desc">专业的数据处理工具</div>
+                </a>
+                <a href="#" class="nav-card" data-type="tool">
+                    <div class="card-icon">📅</div>
+                    <div class="card-title">日程管理</div>
+                    <div class="card-desc">高效规划你的时间</div>
+                </a>
+                <a href="#" class="nav-card" data-type="tool">
+                    <div class="card-icon">📁</div>
+                    <div class="card-title">云存储</div>
+                    <div class="card-desc">安全存储重要文件</div>
+                </a>
+                <a href="#" class="nav-card" data-type="tool">
+                    <div class="card-icon">🔍</div>
+                    <div class="card-title">搜索引擎</div>
+                    <div class="card-desc">快速查找所需信息</div>
+                </a>
+                <a href="#" class="nav-card" data-type="tool">
+                    <div class="card-icon">📚</div>
+                    <div class="card-title">电子书库</div>
+                    <div class="card-desc">海量电子书资源</div>
+                </a>
+            </div>
+        </div>
+        
+        <div class="nav-section">
+            <h2 class="section-title">学习资源</h2>
+            <div class="nav-cards">
+                <a href="#" class="nav-card" data-type="study">
+                    <div class="card-icon">🎓</div>
+                    <div class="card-title">在线课程</div>
+                    <div class="card-desc">各类优质学习课程</div>
+                </a>
+                <a href="#" class="nav-card" data-type="study">
+                    <div class="card-icon">💻</div>
+                    <div class="card-title">编程学习</div>
+                    <div class="card-desc">代码教程与实践</div>
+                </a>
+                <a href="#" class="nav-card" data-type="study">
+                    <div class="card-icon">🔬</div>
+                    <div class="card-title">学术资源</div>
+                    <div class="card-desc">论文与研究资料</div>
+                </a>
+                <a href="#" class="nav-card" data-type="study">
+                    <div class="card-icon">🌐</div>
+                    <div class="card-title">语言学习</div>
+                    <div class="card-desc">多语言学习平台</div>
+                </a>
+            </div>
+        </div>
+        
+        <div class="nav-section">
+            <h2 class="section-title">娱乐休闲</h2>
+            <div class="nav-cards">
+                <a href="#" class="nav-card" data-type="entertainment">
+                    <div class="card-icon">🎬</div>
+                    <div class="card-title">视频平台</div>
+                    <div class="card-desc">热门影视与综艺</div>
+                </a>
+                <a href="#" class="nav-card" data-type="entertainment">
+                    <div class="card-icon">🎵</div>
+                    <div class="card-title">音乐平台</div>
+                    <div class="card-desc">海量音乐资源</div>
+                </a>
+                <a href="#" class="nav-card" data-type="entertainment">
+                    <div class="card-icon">📰</div>
+                    <div class="card-title">新闻资讯</div>
+                    <div class="card-desc">实时热点与资讯</div>
+                </a>
+                <a href="#" class="nav-card" data-type="entertainment">
+                    <div class="card-icon">🎮</div>
+                    <div class="card-title">游戏中心</div>
+                    <div class="card-desc">休闲娱乐小游戏</div>
+                </a>
+            </div>
+        </div>
+        
+        <div class="nav-section">
+            <h2 class="section-title">生活服务</h2>
+            <div class="nav-cards">
+                <a href="#" class="nav-card" data-type="life">
+                    <div class="card-icon">🍲</div>
+                    <div class="card-title">美食外卖</div>
+                    <div class="card-desc">便捷点餐服务</div>
+                </a>
+                <a href="#" class="nav-card" data-type="life">
+                    <div class="card-icon">🚗</div>
+                    <div class="card-title">出行服务</div>
+                    <div class="card-desc">打车与路线规划</div>
+                </a>
+                <a href="#" class="nav-card" data-type="life">
+                    <div class="card-icon">🏥</div>
+                    <div class="card-title">健康医疗</div>
+                    <div class="card-desc">在线问诊与挂号</div>
+                </a>
+                <a href="#" class="nav-card" data-type="life">
+                    <div class="card-icon">🛒</div>
+                    <div class="card-title">网上购物</div>
+                    <div class="card-desc">便捷的购物平台</div>
+                </a>
+            </div>
+        </div>
+        
+        <div class="quick-links">
+            <a href="#" class="quick-link">邮箱</a>
+            <a href="#" class="quick-link">天气</a>
+            <a href="#" class="quick-link">地图</a>
+            <a href="#" class="quick-link">翻译</a>
+            <a href="#" class="quick-link">日历</a>
+            <a href="#" class="quick-link">计算器</a>
+            <a href="#" class="quick-link">便签</a>
+            <a href="#" class="quick-link">词典</a>
+        </div>
+        
+        <div class="article-section">
+            <h2 class="section-title">实用文章</h2>
+            
+            <div class="article-card">
+                <h3 class="article-title">如何提高工作效率：十个实用技巧</h3>
+                <div class="article-content">
+                    <p>在当今快节奏的社会中，高效工作已成为每个人必备的技能。首先，建立明确的目标和计划是提高效率的基础。每天开始前，列出当天需要完成的任务，并按照优先级排序。</p>
+                    <p>其次，学会利用番茄工作法等时间管理技巧，将工作分割成小段时间，每段专注工作后短暂休息。此外，减少多任务处理，研究表明专注于单一任务能够提高完成质量和速度。</p>
+                    <p>最后，合理利用各种效率工具和软件，如日程管理、笔记应用等，能够帮助你更好地组织工作内容，避免重要信息的遗漏。定期回顾和调整自己的工作方式，找到最适合自己的效率模式。</p>
+                </div>
+                <div class="article-meta">
+                    <span>发布日期: 2023-10-15</span>
+                    <span>阅读: 2356</span>
+                </div>
+            </div>
+            
+            <div class="article-card">
+                <h3 class="article-title">数字时代的信息安全防护指南</h3>
+                <div class="article-content">
+                    <p>随着数字化程度的不断深入，个人信息安全变得尤为重要。首先，使用强密码并定期更换是基本防护措施。强密码应包含大小写字母、数字和特殊符号，避免使用生日等容易被猜测的信息。</p>
+                    <p>其次，开启双重认证功能能够为账户提供额外的安全保障。即使密码泄露，没有第二重验证也无法登录账户。此外，定期更新软件和系统也是防范安全漏洞的重要手段。</p>
+                    <p>最后，提高个人信息安全意识，谨慎对待网络钓鱼和社交工程攻击。不随意点击可疑链接，不在不可信的网站输入个人敏感信息，这些简单的习惯能够有效降低信息泄露的风险。</p>
+                </div>
+                <div class="article-meta">
+                    <span>发布日期: 2023-11-20</span>
+                    <span>阅读: 1892</span>
+                </div>
+            </div>
+            
+            <div class="article-card">
+                <h3 class="article-title">健康生活方式：平衡工作与生活的艺术</h3>
+                <div class="article-content">
+                    <p>在追求事业成功的同时，维持身心健康同样重要。首先，建立规律的作息时间，保证充足的睡眠是健康的基础。研究表明，成年人每天应保证7-8小时的睡眠时间。</p>
+                    <p>其次，均衡的饮食和适当的运动是保持健康的关键。即使工作再忙，也应该保证每天至少30分钟的中等强度运动，如快走、游泳或骑行。此外，学会应对压力，培养健康的减压方式，如冥想、阅读或与朋友交流。</p>
+                    <p>最后，学会在工作和个人生活之间设置界限，下班后尽量避免处理工作事务，给自己和家人留出高质量的相处时间。记住，真正的成功不仅仅是事业上的成就，更包括健康的身体和幸福的生活。</p>
+                </div>
+                <div class="article-meta">
+                    <span>发布日期: 2023-12-05</span>
+                    <span>阅读: 2103</span>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2024 个人导航 | 让工作与生活更便捷</p>
+            <p>本站内容仅供个人使用 | 最后更新: <span id="last-update"></span></p>
+        </footer>
+    </div>
+    
+    <button class="settings-button" id="settings-button">⚙️</button>
+    
+    <script>
+        // 显示当前日期和时间
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric', 
+                weekday: 'long',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            const dateTimeStr = now.toLocaleDateString('zh-CN', options);
+            document.getElementById('date-display').textContent = dateTimeStr;
+        }
+        
+        // 设置最后更新时间
+        function setLastUpdate() {
+            const lastUpdate = new Date();
+            const options = { 
+                year: 'numeric', 
+                month: 'numeric', 
+                day: 'numeric'
+            };
+            document.getElementById('last-update').textContent = lastUpdate.toLocaleDateString('zh-CN', options);
+        }
+        
+        // 搜索功能
+        function setupSearch() {
+            const searchButton = document.getElementById('search-button');
+            const searchInput = document.getElementById('search-input');
+            
+            searchButton.addEventListener('click', function() {
+                performSearch();
+            });
+            
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            
+            function performSearch() {
+                const query = searchInput.value.trim();
+                if (query) {
+                    // 这里可以替换为您想使用的搜索引擎
+                    alert(`您搜索的内容是: ${query}\n实际应用中会跳转到搜索引擎`);
+                    // window.location.href = `https://www.baidu.com/s?wd=${encodeURIComponent(query)}`;
+                    searchInput.value = '';
+                }
+            }
+        }
+        
+        // 卡片点击效果
+        function setupCardClicks() {
+            const cards = document.querySelectorAll('.nav-card');
+            cards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const title = this.querySelector('.card-title').textContent;
+                    const type = this.getAttribute('data-type');
+                    alert(`您点击了: ${title}\n分类: ${type}\n实际应用中会跳转到相应网站`);
+                });
+            });
+        }
+        
+        // 设置按钮效果
+        function setupSettingsButton() {
+            const settingsButton = document.getElementById('settings-button');
+            settingsButton.addEventListener('click', function() {
+                alert('设置面板\n\n这里可以添加个性化设置选项，如更换主题颜色、调整布局等功能。');
+            });
+        }
+        
+        // 添加卡片悬停动画效果
+        function setupCardAnimations() {
+            const cards = document.querySelectorAll('.nav-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    const icon = this.querySelector('.card-icon');
+                    icon.style.transform = 'scale(1.2) rotate(5deg)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    const icon = this.querySelector('.card-icon');
+                    icon.style.transform = 'scale(1) rotate(0)';
+                });
+            });
+        }
+        
+        // 页面加载完成后执行
+        window.addEventListener('DOMContentLoaded', function() {
+            updateDateTime();
+            setLastUpdate();
+            setupSearch();
+            setupCardClicks();
+            setupSettingsButton();
+            setupCardAnimations();
+            
+            // 每分钟更新一次时间
+            setInterval(updateDateTime, 60000);
+        });
+    </script>
+</body>
+</html>
